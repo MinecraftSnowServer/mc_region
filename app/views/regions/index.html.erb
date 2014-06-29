@@ -1,11 +1,44 @@
-<ul>
-<% @regions.each do |region| %>
-  <li>
-  <%= region.name %>
-  <%= link_to 'Show', :controller => 'regions', :action => 'show', :id => region %>
-  <%= link_to 'Edit', :controller => 'regions', :action => 'edit', :id => region %>
-  <%= link_to 'Delete', :controller => 'regions', :action => 'destroy', :id => region %>
-  </li>
+<table class="ui sortable table segment">
+  <thead>
+    <tr>
+      <th>Area</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Pos</th>
+      <th>Priority</th>
+      <th>Owners</th>
+      <th>Members</th>
+      <th>Manage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @regions.each do |region| %>
+    <tr>
+      <td>{%= region.area %}</td>
+      <td><%= region.name %></td>
+      <td>{%= region.type %}</td>
+      <td>
+        Min: {%= region.min %} <br/>
+        Max: {%= region.max %}
+      </td>
+      <td>{%= region.priority %}</td>
+      <td>{%= region.owner %} ...</td>
+      <td>{%= region.member %} ...</td>
+      <td>Edit</td>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr><th colspan="3">
+      <div class="ui blue labeled icon button"><i class="user icon"></i> Add User</div>
+    </th>
+  </tr></tfoot>
+</table>
+
+<%= content_for :footer_scripts do %>
+  <script type="text/javascript">
+    (function(){
+      ('.sortable').tablesort();
+    });
+  </script>
 <% end %>
-</ul>
-<%= link_to 'New region', :controller => 'regions', :action => 'new' %>

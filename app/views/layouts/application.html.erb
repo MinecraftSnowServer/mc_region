@@ -1,14 +1,19 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>McRegion</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>阿爾法領地管理系統</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <%= yield :head_css %>
 </head>
-<body>
-
-<%= yield %>
-
+<body style="width: 80%; margin: 3em auto; background: #FCFCFC url(../images/bg.jpg) repeat;">
+  <h1 class="ui center aligned header">阿爾法領地管理系統</h1>
+  <%= yield %>
+  <%= yield :footer_scripts %>
 </body>
 </html>
