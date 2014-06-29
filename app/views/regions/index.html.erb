@@ -14,16 +14,16 @@
   <tbody>
     <% @regions.each do |region| %>
     <tr>
-      <td>{%= region.area %}</td>
+      <td><%= region.area %></td>
       <td><%= region.name %></td>
-      <td>{%= region.type %}</td>
+      <td><%= region.type %></td>
       <td>
-        Min: {%= region.min %} <br/>
-        Max: {%= region.max %}
+        Min: <%= region.min_pos %> <br/>
+        Max: <%= region.max_pos %>
       </td>
-      <td>{%= region.priority %}</td>
-      <td>{%= region.owner %} ...</td>
-      <td>{%= region.member %} ...</td>
+      <td><%= region.priority %></td>
+      <td><%= region.owners %> ...</td>
+      <td><%= region.members %> ...</td>
       <td>Edit</td>
     </tr>
     <% end %>
