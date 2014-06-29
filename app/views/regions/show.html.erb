@@ -1,0 +1,7 @@
+<%= @region.name %>
+(<%= @region.min_pos %>) ~
+(<%= @region.max_pos %>)
+<%= simple_format(@region.owners) %>
+<%= simple_format(@region.members) %>
+
+<p><%= link_to 'Back to index', :controller => 'regions', :action => 'index' %></p>

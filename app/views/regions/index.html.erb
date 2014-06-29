@@ -1,0 +1,11 @@
+<ul>
+<% @regions.each do |region| %>
+  <li>
+  <%= region.name %>
+  <%= link_to 'Show', :controller => 'regions', :action => 'show', :id => region %>
+  <%= link_to 'Edit', :controller => 'regions', :action => 'edit', :id => region %>
+  <%= link_to 'Delete', :controller => 'regions', :action => 'destroy', :id => region %>
+  </li>
+<% end %>
+</ul>
+<%= link_to 'New region', :controller => 'regions', :action => 'new' %>
