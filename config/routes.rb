@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'welcome/index'
+  resources :regions
   get ':controller(/:action(/:id(.:format)))'
 
 

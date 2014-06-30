@@ -19,10 +19,6 @@ class RegionsController < ApplicationController
     @region = Region.find(params[:id])
   end
 
-  def show
-    @region = Region.find(params[:id])
-  end
-
   def edit
     @region = Region.find(params[:id])
   end
