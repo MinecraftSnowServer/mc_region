@@ -1,18 +1,1349 @@
-<%= form_for @region, :url => { :controller => 'regions', :action => 'update' } do |f| %>
-    <%= f.label :name, "Name" %>
-    <%= f.text_field :name %>
+<%= form_for @region, :url =>{ :controller => 'regions', :action => 'update' } do |f| %>
+<style type="text/css">
+	.flag-dsc {
+		color: rgb(200,200,200)
+	}
+</style>
 
-    <%= f.label :min_pos, "Min Pos" %>
-    <%= f.text_field :min_pos %>
+<div class="ui form segment">
+	<h3>Basic Files</h3>
+	<div class="field">
+		<label>Region Name</label>
+		<div class="ui left labeled icon input">
+			<%= f.text_field :name, placeholder: "Region Name" %> <i class="user icon"></i>
+		</div>
+	</div>
+	<div class="field">
+		<label>Mini Point POS</label>
+		<div class="ui left labeled icon input">
+			<%= f.text_field :min_pos, placeholder: "Mini Point POS ( Ex: -100, 1, 100 )" %> <i class="user icon"></i>
+		</div>
+	</div>
+	<div class="field">
+		<label>Max Point POS</label>
+		<div class="ui left labeled icon input">
+			<%= f.text_field :max_pos, placeholder: "Max Point POS ( Ex: 100, 255, -100 )" %>
+			<i class="user icon"></i>
+		</div>
+	</div>
+	<div class="field">
+		<label>Owners</label>
+		<div class="ui left labeled icon input">
+			<%= f.text_field :owners, placeholder: "Owners ( Ex: Mob, VIP )" %>
+			<i class="user icon"></i>
+		</div>
+	</div>
+	<div class="field">
+		<label>Members</label>
+		<div class="ui left labeled icon input">
+			<%= f.text_field :members, placeholder: "Members ( Ex: sntc6655, davy5566 )" %>
+			<i class="user icon"></i>
+		</div>
+	</div>
+</div>
 
-    <%= f.label :max_pos, "Max Pos" %>
-    <%= f.text_field :max_pos %>
+<div class="fluid ui blue button">Create Region without Setting Flags</div>
 
-    <%= f.label :owners, "Owners" %>
-    <%= f.text_field :owners %>
+<div id='flags-state' class="ui form segment">
+	<h3>Flags of State</h3>
+	<p style="color: rgb(177, 177, 177);">
+		This type of flag has three states: allow, none, and deny. allow will allow the event to happen in the region, deny will disallow the event to happen, and none will use the default behavior as if there was no region.
+	</p>
+	<p style="color: rgb(177, 177, 177);">
+		Note that the build flag is unique. If set to none (which it is by default) only members of the region can build.
+	</p>
+	<table>
+		<tbody>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Use allow to have this region treated as a region that doesn't check build permission (use this to make simple no-PVP, etc. zones)."></i>
+						<label>passthrough</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.passthrough, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.passthrough, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.passthrough, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="All members and owners will be able to build normally without changing this flag, do not change it. This flag overrides all region build checks. Deny always takes precedence over allow. If you simply want to protect a region, you don't have to touch this flag. By default no one can build in a region until you use addowner/addmember to add a player to the region."></i>
+						<label>build</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.build, :none, checked: "checked" %>
+								<%= f.radio :flags.build, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.build, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.build, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block PvP."></i>
+						<label>pvp</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.pvp, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.pvp, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.pvp, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block mob damage on players."></i>
+						<label>mob-damage</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.mob-damage, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.mob-damage, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.mob-damage, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block non-player entities from destroying item-frames."></i>
+						<label>entity-item-frame-destroy</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entity-item-frame-destroy, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entity-item-frame-destroy, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entity-item-frame-destroy, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block non-player entities from destroying paintings."></i>
+						<label>entity-painting-destroy</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entity-painting-destroy, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entity-painting-destroy, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entity-painting-destroy, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or deny mobs spawning"></i>
+						<label>mob-spawning</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.mob-spawning, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.mob-spawning, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.mob-spawning, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block creeper damage to terrain and players."></i>
+						<label>creeper-explosion</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.creeper-explosion, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.creeper-explosion, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.creeper-explosion, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or prevent endermen from picking up or placing blocks."></i>
+						<label>enderman-grief</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderman-grief, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderman-grief, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderman-grief, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or prevent players from teleporting to or from regions using enderpearls."></i>
+						<label>enderpearl</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderpearl, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderpearl, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderpearl, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or prevent enderdragon damage to blocks."></i>
+						<label>enderdragon-block-damage</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderdragon-block-damage, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderdragon-block-damage, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.enderdragon-block-damage, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block fireballs damage to terrain and players."></i>
+						<label>ghast-fireball</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ghast-fireball, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ghast-fireball, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ghast-fireball, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block players from entering beds."></i>
+						<label>sleep</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.sleep, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.sleep, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.sleep, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block TNT."></i>
+						<label>tnt</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.tnt, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.tnt, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.tnt, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block flint and steel."></i>
+						<label>lighter</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lighter, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lighter, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lighter, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block the spread of fire (requires high frequency flags to be on in configuration)"></i>
+						<label>fire-spread</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.fire-spread, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.fire-spread, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.fire-spread, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block whether lava can start fires (requires high frequency flags to be on in configuration)"></i>
+						<label>lava-fire</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lava-fire, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lava-fire, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lava-fire, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block lightning striking at all in a region"></i>
+						<label>lightning</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lightning, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lightning, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lightning, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block the player from opening chests, furnaces, and other containers in a region"></i>
+						<label>chest-access</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.chest-access, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.chest-access, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.chest-access, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block piston activation"></i>
+						<label>pistons</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.pistons, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.pistons, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.pistons, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block flow of water. (requires high frequency flags to be on in configuration) "></i>
+						<label>water-flow</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.water-flow, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.water-flow, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.water-flow, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block flow of lava. (requires high frequency flags to be on in configuration)"></i>
+						<label>lava-flow</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lava-flow, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lava-flow, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.lava-flow, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block the ability to use doors, buttons, pressure plates, levers, etc"></i>
+						<label>use</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.use, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.use, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.use, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block the ability to place vehicles"></i>
+						<label>vehicle-place</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.vehicle-place, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.vehicle-place, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.vehicle-place, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block the ability to remove vehicles"></i>
+						<label>vehicle-destroy</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.vehicle-destroy, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.vehicle-destroy, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.vehicle-destroy, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block snow from forming in an area. Note that this will not block weather altogether, that can be done in the config."></i>
+						<label>snow-fall</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.snow-fall, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.snow-fall, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.snow-fall, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block snow from melting in an area."></i>
+						<label>snow-melt</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.snow-melt, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.snow-melt, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.snow-melt, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block ice from forming in an area."></i>
+						<label>ice-form</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ice-form, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ice-form, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ice-form, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block ice from melting in an area."></i>
+						<label>ice-melt</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ice-melt, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ice-melt, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.ice-melt, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block leaves from decaying."></i>
+						<label>leaf-decay</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.leaf-decay, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.leaf-decay, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.leaf-decay, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block grass from spreading to dirt."></i>
+						<label>grass-growth</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.grass-growth, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.grass-growth, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.grass-growth, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Sets a temporary godmode on the player. This will also disable /god-mode if set to deny, unless the player has the worldguard.god.override-regions permission."></i>
+						<label>invincible</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.invincible, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.invincible, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.invincible, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or deny a group of players to enter an area"></i>
+						<label>entry</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entry, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entry, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.entry, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or deny a group of players to leave an area"></i>
+						<label>exit</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.exit, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.exit, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.exit, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Sets whether or not a player can send chat inside the region"></i>
+						<label>send-chat</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.send-chat, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.send-chat, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.send-chat, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Sets whether or not a player can receive chat inside the region."></i>
+						<label>receive-chat</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.receive-chat, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.receive-chat, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.receive-chat, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;">
+					<p>
+						<i class="question icon link popup" data-content="Allow or block splash effect from potion"></i>
+						<label>potion-splash</label>
+					</p>
+				</td>
+				<td class="ui vertical " style="padding-left: 1em;">
+					<div class="inline fields">
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.potion-splash, :none, checked: "checked" %>
+								<label>None</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.potion-splash, :allow%>
+								<label>Allow</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<%= f.radio :flags.potion-splash, :deny%>
+								<label>Deny</label>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div id='flags-string' class="ui form segment">
+	<h3>Flags of String</h3>
+	<p style="color: rgb(177, 177, 177);">
+		This can be set to any arbitrary text. Note that if it is unset, it will usually disable the flag.
+	</p>
+	<p style="color: rgb(177, 177, 177);">
+		Some strings support color formatting, such as the greeting and farewell flags. The
+		<a href="http://wiki.sk89q.com/wiki/WorldGuard/Regions/Flags#String" target="_blank">color codes</a>
+		are used in WorldGuard.
+	</p>
+	<p style="color: rgb(177, 177, 177);">
+		Since v5.8.1In, addition, &k, &l, &m, &n, and &o are 'obfuscated/magic', bold, strikethrough, underline, and italic, respectively. The reset code is &x.
+	</p>
+	<div class="field">
+		<label>
+			greeting <i class="question icon link popup" data-content="Message to show a player when they enter a region. See String flag below for formatting." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.greeting, placeholder: "greeting ( unset | All )" %>
+	</div>
+	<div class="field">
+		<label>
+			farewell <i class="question icon link popup" data-content="Message to show a player when they leave a region. See String flag below for formatting." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.farewell, placeholder: "farewell ( unset | All )" %>
+	</div>
+</div>
+<div id='flags-list' class="ui form segment">
+	<h3>Flags of List</h3>
+	<p style="color: rgb(177, 177, 177);">
+		This flag can be set to a list of strings. Input values should be comma separated.
+	</p>
+	<div class="field">
+		<label>
+			deny-spawn <i class="question icon link popup" data-content="Set mobs that can't spawn within the region. From console or ingame: /region flag [id] denyspawn Skeleton,Zombie,Creeper,etc . In config file: deny-spawn: [SKELETON, CREEPER, ZOMBIE, ETC]" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.deny-spawn, placeholder: "deny-spawn ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			blocked-cmds <i class="question icon link popup" data-content="Sets the commands that will be blocked inside the region" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.blocked-cmds, placeholder: "blocked-cmds ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			allowed-cmds
+			<i class="question icon link popup" data-content="Sets the commands allowed in the region. If this is set (not empty) it will act like a whitelist and ONLY commands from this list will be allowed." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.allowed-cmds, placeholder: "allowed-cmds ( unset | N/A )" %>
+	</div>
+</div>
+<div id="flags-integer" class="ui form segment">
+	<h3>Flags of Interger</h3>
+	<p style="color: rgb(177, 177, 177);">
+		This flag can be any number, negative or positive, that does not have a fraction or decimal portion.
+	</p>
+	<div class="field">
+		<label>
+			heal-delay <i class="question icon link popup" data-content="Set the time in seconds between heal-amount triggering" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.heal-delay, placeholder: "heal-delay ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			heal-amount <i class="question icon link popup" data-content="Set the amount per heal time (see heal-delay)" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.heal-amount, placeholder: "heal-amount ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			heal-min-health
+			<i class="question icon link popup" data-content="Minimum health the heal flags will drop a player to." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.heal-min-health, placeholder: "heal-min-health ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			heal-max-health
+			<i class="question icon link popup" data-content="Maximum health the heal flags will raise a player to. (a full bar is 20 hearts)" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.heal-max-health, placeholder: "heal-max-health ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			feed-delay
+			<i class="question icon link popup" data-content="Set the time in seconds between feed-amount triggering" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.feed-delay, placeholder: "feed-delay ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			feed-amount
+			<i class="question icon link popup" data-content="Set the amount per hunger regen time (see feed-delay)" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.feed-amount, placeholder: "feed-amount ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			feed-min-hunger
+			<i class="question icon link popup" data-content="Minimum hunger the feed flags will drop a player to." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.feed-min-hunger, placeholder: "feed-min-hunger ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			feed-max-hunger
+			<i class="question icon link popup" data-content="Maximum hunger the feed flags will raise a player to. (a full bar is 20 food)" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.feed-max-hunger, placeholder: "feed-max-hunger ( unset | N/A )" %>
+	</div>
+</div>
+<div id="flags-boolean" class="ui form segment">
+	<h3>Flags of Boolean</h3>
+	<p style="color: rgb(177, 177, 177);">
+		This flag can be either true or false. It differs from state flags in that it does not have a default position (none) to fall to.
+	</p>
+	<div class="field">
+		<label>
+			notify-enter <i class="question icon link popup" data-content="Sends a message to players with the worldguard.notify permission when a player enters a region." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.notify-enter, placeholder: "notify-enter ( False | All )" %>
+	</div>
+	<div class="field">
+		<label>
+			notify-leave <i class="question icon link popup" data-content="Sends a message to players with the worldguard.notify permission when a player leaves a region." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.notify-leave, placeholder: "notify-leave ( False | All )" %>
+	</div>
+</div>
+<div id="flags-location" class="ui form segment">
+	<h3>Flags of Location</h3>
+	<p style="color: rgb(177, 177, 177);">
+		This flag represents a location. It consists of an x, y, and z coordinate. It can also be "here" for your current location or "none" to unset the flag.
+	</p>
+	<div class="field">
+		<label>
+			teleport <i class="question icon link popup" data-content="Defines the location /region teleport <id>teleports you to." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.teleport, placeholder: " ( unset | N/A )" %>
+	</div>
+	<div class="field">
+		<label>
+			spawn <i class="question icon link popup" data-content="Define the spawn of the region, use /region flag region x y z" data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.spawn, placeholder: " ( unset | N/A )" %>
+	</div>
+</div>
+<div id="flags-group" class="ui form segment">
+	<h3>Flags of Group</h3>
+	<p style="color: rgb(177, 177, 177);">
+		Possible values were: members, nonmembers, owners, nonowners, or everyone.
+	</p>
+	<p style="color: rgb(177, 177, 177);">
+		If editing regions.yml directly, the values were: MEMBERS, NON_MEMBERS, OWNERS, NON_OWNERS, or ALL.
+	</p>
+	<div class="field">
+		<label>
+			construct <i class="question icon link popup" data-content="Deprecated. Don't use this flag at all. It's broken and should be considered deprecated." data-variation="inverted"></i>
+		</label>
+		<%= f.text_field :flags.construct, placeholder: "construct ( Members | N/A )" %>
+	</div>
+</div>
 
-    <%= f.label :members, "Members" %>
-    <%= f.text_field :members %>
+<div class="fluid ui blue button">Edit Region</div>
+<% end %>
 
-    <%= f.submit "Create" %>
+<%= content_for :footer_scripts do %>
+<script type="text/javascript">
+	$(function(){
+		$('.ui.radio.checkbox')
+			.checkbox()
+		;
+		$('.popup')
+			.popup({
+			})
+		;
+	});
+</script>
 <% end %>
